@@ -2,7 +2,6 @@ package br.com.bootcamp.zup.fatura.detalhefatura;
 
 
 import br.com.bootcamp.zup.fatura.Fatura;
-import br.com.bootcamp.zup.fatura.FaturaPk;
 import br.com.bootcamp.zup.fatura.FaturaRepository;
 import br.com.bootcamp.zup.fatura.consometransacao.Cartao;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +20,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("faturas/cartoes/{idCartao}")
-public class ConsultaFaturaController {
+public class ConsultaDetalhesFaturaController {
 
     @Autowired
     FaturaRepository faturaRepository;
@@ -38,7 +37,7 @@ public class ConsultaFaturaController {
             return ResponseEntity.notFound().build();
         }
         Month mesAtual = LocalDate.now().getMonth();
-        Optional<Fatura> faturaOptional = faturaRepository.findById(new FaturaPk(mesAtual, idCartao));
+        Optional<Fatura> faturaOptional = faturaRepository.findByCartaoAndMesReferencia(cartao,mesAtual);
 
         if (!faturaOptional.isPresent()) {
             return ResponseEntity.notFound().build();

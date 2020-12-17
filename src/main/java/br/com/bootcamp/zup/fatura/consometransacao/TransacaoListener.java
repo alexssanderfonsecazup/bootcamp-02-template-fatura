@@ -1,7 +1,6 @@
 package br.com.bootcamp.zup.fatura.consometransacao;
 
 import br.com.bootcamp.zup.fatura.Fatura;
-import br.com.bootcamp.zup.fatura.FaturaPk;
 import br.com.bootcamp.zup.fatura.FaturaRepository;
 import br.com.bootcamp.zup.fatura.consometransacao.kafka.response.EventoDeTransacao;
 import org.slf4j.Logger;
@@ -14,7 +13,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 import java.util.Arrays;
-import java.util.HashSet;
+import java.util.Optional;
 
 @Component
 public class TransacaoListener implements ApplicationListener<NovaTransacaoEvent> {
@@ -47,21 +46,24 @@ public class TransacaoListener implements ApplicationListener<NovaTransacaoEvent
     }
 
     private void adicionarNaFatura(Transacao transacao) {
-        Fatura fatura = entityManager.find(Fatura.class, new FaturaPk(transacao.getEfetivadaEm().getMonth(), transacao.getCartao().getId()));
-        logger.info("Verificando se já existe fatura iniciada para o mês da transação ");
+        Optional<Fatura> optionalFatura = faturaRepository.findByCartaoAndMesReferencia(transacao.getCartao(), transacao.getEfetivadaEm().getMonth());
 
-        if (fatura !=null ) {
-            logger.info("Fatura já existe");
-            fatura.getTransacoes().add(transacao);
-            logger.info("Transação adicionada na fatura");
+        logger.info("Verificando se já existe fatura iniciada para o cartão {} no mês de {}", transacao.getCartao().getId(), transacao.getEfetivadaEm().getMonth());
+
+        if (optionalFatura.isPresent()) {
+            logger.info("Encontrada fatura {}", optionalFatura.get().getId());
+            optionalFatura.get().getTransacoes().add(transacao);
+            logger.info("Transação {} adicionada na fatura {}", transacao.getId(), optionalFatura.get().getId());
             return;
         }
 
-        logger.info("Fatura criada");
-        fatura = new Fatura(transacao.getEfetivadaEm().getMonth(),transacao.getCartao().getId());
+
+        Fatura fatura = new Fatura(transacao.getCartao(), transacao.getEfetivadaEm().getMonth());
         entityManager.persist(fatura);
         fatura.setTransacoes(Arrays.asList(transacao));
-        logger.info("Transação adicionada na fatura");
+
+        logger.info("Fatura {} criada para o cartao {}", fatura.getId(), transacao.getCartao().getId());
+        logger.info("Transação {} adicionada na fatura {}", fatura.getId(), transacao.getId());
     }
 
 
