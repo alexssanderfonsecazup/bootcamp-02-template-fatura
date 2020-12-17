@@ -1,7 +1,6 @@
 package br.com.bootcamp.zup.fatura;
 
 import br.com.bootcamp.zup.fatura.consometransacao.Transacao;
-import org.springframework.util.Assert;
 
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
@@ -9,7 +8,7 @@ import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.time.Month;
-import java.util.Set;
+import java.util.List;
 
 @Entity
 public class Fatura {
@@ -18,36 +17,29 @@ public class Fatura {
     @EmbeddedId
     private FaturaPk id;
 
-    @NotNull
-    private BigDecimal total;
-
     @OneToMany
-    private Set<Transacao> transacoes;
+    private List<Transacao> transacoes;
+
 
     @Deprecated
     public Fatura() {
     }
 
-    public Fatura(FaturaPk id, @NotNull Month mes, @NotNull BigDecimal total) {
+    public Fatura(@NotNull  Month mes, @NotNull String idCartao) {
+        FaturaPk id = new FaturaPk(mes, idCartao);
         this.id = id;
-        this.total = total;
-
     }
 
-    public void adicionaValorNaFatura(@NotNull BigDecimal valor) {
-        Assert.isTrue(total != null, "Você não pode fazer a soma com o total nulo");
-        this.total = total.add(valor);
+    public BigDecimal calculaValorFatura(){
+        return Transacao.somaTransacoes(transacoes);
     }
 
-    public BigDecimal getTotal() {
-        return total;
-    }
 
-    public void setTransacoes(Set<Transacao> transacoes) {
+    public void setTransacoes(List<Transacao> transacoes) {
         this.transacoes = transacoes;
     }
 
-    public Set<Transacao> getTransacoes() {
+    public List<Transacao> getTransacoes() {
         return transacoes;
     }
 }

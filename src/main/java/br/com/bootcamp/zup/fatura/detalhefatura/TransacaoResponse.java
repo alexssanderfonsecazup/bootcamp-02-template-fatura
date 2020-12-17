@@ -4,6 +4,8 @@ import br.com.bootcamp.zup.fatura.consometransacao.Transacao;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class TransacaoResponse {
 
@@ -19,6 +21,12 @@ public class TransacaoResponse {
         this.efetivadaEm = transacao.getEfetivadaEm();
     }
 
+    public static List<TransacaoResponse> toList(List<Transacao> transacoes){
+        return transacoes.stream()
+                .map(TransacaoResponse::new)
+                .collect(Collectors.toList());
+
+    }
 
     public String getId() {
         return id;

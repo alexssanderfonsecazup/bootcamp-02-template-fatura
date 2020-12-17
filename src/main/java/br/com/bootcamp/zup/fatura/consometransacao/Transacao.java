@@ -1,23 +1,21 @@
 package br.com.bootcamp.zup.fatura.consometransacao;
 
 
-
-import br.com.bootcamp.zup.fatura.consometransacao.Cartao;
-import br.com.bootcamp.zup.fatura.consometransacao.Estabelecimento;
-
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
-public class Transacao {
+public class Transacao  {
     @Id
     @NotNull
     private String id;
 
-    @NotNull @Positive
+    @NotNull
+    @Positive
     private BigDecimal valor;
 
     @NotNull
@@ -27,11 +25,12 @@ public class Transacao {
     @NotNull
     private LocalDateTime efetivadaEm;
 
-    @ManyToOne(cascade = CascadeType.PERSIST )
-    @JoinColumn(name ="cartao_id")
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "cartao_id")
     private Cartao cartao;
 
-    public Transacao(){}
+    public Transacao() {
+    }
 
     public Transacao(@NotNull String id, @NotNull @Positive BigDecimal valor, @NotNull Estabelecimento estabelecimento, @NotNull LocalDateTime efetivadaEm, Cartao cartao) {
         this.id = id;
@@ -39,6 +38,12 @@ public class Transacao {
         this.estabelecimento = estabelecimento;
         this.efetivadaEm = efetivadaEm;
         this.cartao = cartao;
+    }
+
+    public static BigDecimal somaTransacoes(List<Transacao> transacoes) {
+        return transacoes.stream()
+                .map(Transacao::getValor)
+                .reduce(new BigDecimal(0.0), (valorAnterior, valorAtual) -> valorAnterior.add(valorAtual));
     }
 
     public String getId() {

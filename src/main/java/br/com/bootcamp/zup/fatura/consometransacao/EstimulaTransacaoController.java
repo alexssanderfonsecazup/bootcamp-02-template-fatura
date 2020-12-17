@@ -25,10 +25,10 @@ public class EstimulaTransacaoController {
     @PersistenceContext
     EntityManager entityManager;
 
-    @Value("${transacao.idcartao.estimular}")
+    @Value("${transacao.idcartao}")
     private  String cartaoEstimulado;
 
-    @Value("${transacao.email.logado}")
+    @Value("${transacao.emaillogado}")
     private  String emailUsuarioLogado;
 
     private Logger logger = LoggerFactory.getLogger(EstimulaTransacaoController.class);

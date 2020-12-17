@@ -42,10 +42,8 @@ public class ConsultaFaturaController {
 
         if (!faturaOptional.isPresent()) {
             return ResponseEntity.notFound().build();
-
         }
         return ResponseEntity.ok(new DetalheFaturaResponse(faturaOptional.get()));
-
 
     }
 }

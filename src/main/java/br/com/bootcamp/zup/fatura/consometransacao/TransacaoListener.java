@@ -51,20 +51,17 @@ public class TransacaoListener implements ApplicationListener<NovaTransacaoEvent
         logger.info("Verificando se já existe fatura iniciada para o mês da transação ");
 
         if (fatura !=null ) {
-            logger.info("Já existe valores na fatura do mês");
+            logger.info("Fatura já existe");
             fatura.getTransacoes().add(transacao);
-            fatura.adicionaValorNaFatura(transacao.getValor());
-            logger.info("Valor da transação adicionada na fatura do mês com sucesso");
+            logger.info("Transação adicionada na fatura");
             return;
         }
 
-        logger.info("Primeira transação para a fatura do mês");
-        FaturaPk id = new FaturaPk(transacao.getEfetivadaEm().getMonth(), transacao.getCartao().getId());
-        fatura = new Fatura(id, transacao.getEfetivadaEm().getMonth(), transacao.getValor());
+        logger.info("Fatura criada");
+        fatura = new Fatura(transacao.getEfetivadaEm().getMonth(),transacao.getCartao().getId());
         entityManager.persist(fatura);
-        fatura.setTransacoes(new HashSet<Transacao>(Arrays.asList(transacao)));
-        logger.info("Valor da transação adicionado na fatura com sucesso");
-
+        fatura.setTransacoes(Arrays.asList(transacao));
+        logger.info("Transação adicionada na fatura");
     }
 
 
