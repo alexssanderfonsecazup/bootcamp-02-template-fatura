@@ -31,6 +31,8 @@ public class Parcela {
     @Positive
     private int quantidade;
 
+    private StatusParcelamentoEnum status;
+
     @CreationTimestamp
     private Instant criadoEm;
 
@@ -67,5 +69,9 @@ public class Parcela {
 
     public BigDecimal getValorParcela() {
         return valorParcela;
+    }
+
+    public void setStatus(StatusParcelamentoEnum status) {
+        this.status = status;
     }
 }

@@ -30,7 +30,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/cartoes/{idCartao}/saldo")
+@RequestMapping("/cartoes/{idCartao}/saldos")
 public class ConsultaSaldoController {
 
     @PersistenceContext
