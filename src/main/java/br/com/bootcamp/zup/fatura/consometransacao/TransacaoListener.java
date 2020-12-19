@@ -12,6 +12,9 @@ import org.springframework.stereotype.Component;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
+import java.time.LocalDate;
+import java.time.Year;
+import java.time.YearMonth;
 import java.util.Arrays;
 import java.util.Optional;
 
@@ -46,7 +49,8 @@ public class TransacaoListener implements ApplicationListener<NovaTransacaoEvent
     }
 
     private void adicionarNaFatura(Transacao transacao) {
-        Optional<Fatura> optionalFatura = faturaRepository.findByCartaoAndMesReferencia(transacao.getCartao(), transacao.getEfetivadaEm().getMonth());
+        LocalDate dataAtual = LocalDate.now();
+        Optional<Fatura> optionalFatura = faturaRepository.findByCartaoAndMesAndAno(transacao.getCartao(),dataAtual.getMonth(), dataAtual.getYear());
 
         logger.info("Verificando se já existe fatura iniciada para o cartão {} no mês de {}", transacao.getCartao().getId(), transacao.getEfetivadaEm().getMonth());
 
@@ -58,7 +62,7 @@ public class TransacaoListener implements ApplicationListener<NovaTransacaoEvent
         }
 
 
-        Fatura fatura = new Fatura(transacao.getCartao(), transacao.getEfetivadaEm().getMonth());
+        Fatura fatura = new Fatura(transacao.getCartao(), transacao.getEfetivadaEm().getMonth(), transacao.getEfetivadaEm().getYear());
         entityManager.persist(fatura);
         fatura.setTransacoes(Arrays.asList(transacao));
 

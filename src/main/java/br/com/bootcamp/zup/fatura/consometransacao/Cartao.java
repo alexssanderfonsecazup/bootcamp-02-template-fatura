@@ -44,8 +44,9 @@ public class Cartao {
     }
 
     public void atualizaLimiteCasoAlterado(String limite) {
+
         BigDecimal novoLimite = new BigDecimal(limite);
-        if (!this.limite.equals(novoLimite)) {
+        if (!limite.equals(this.limite)) {
             this.limite = novoLimite;
         }
     }

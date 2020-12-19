@@ -6,7 +6,9 @@ import br.com.bootcamp.zup.fatura.consometransacao.Transacao;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.Month;
+import java.time.Year;
 import java.util.List;
 import java.util.UUID;
 
@@ -20,7 +22,11 @@ public class Fatura {
     @OneToMany
     private List<Transacao> transacoes;
 
-    private Month mesReferencia;
+    private Month mes;
+
+    private int ano;
+
+    private LocalDate vencimento;
 
     @ManyToOne
     private Cartao cartao;
@@ -30,9 +36,11 @@ public class Fatura {
     public Fatura() {
     }
 
-    public Fatura(@NotNull Cartao cartao, Month mesReferencia) {
+    public Fatura(@NotNull Cartao cartao, Month mes, int ano) {
         this.cartao = cartao;
-        this.mesReferencia = mesReferencia;
+        this.mes = mes;
+        this.ano = ano;
+        this.vencimento = LocalDate.of(ano, mes.plus(1l),10);
     }
 
     public BigDecimal calculaValorFatura(){
@@ -52,7 +60,11 @@ public class Fatura {
         return id;
     }
 
-    public Month getMesReferencia() {
-        return mesReferencia;
+    public Month getMes() {
+        return mes;
+    }
+
+    public int getAno() {
+        return ano;
     }
 }

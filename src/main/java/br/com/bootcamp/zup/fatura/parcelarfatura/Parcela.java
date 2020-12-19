@@ -44,16 +44,12 @@ public class Parcela {
     @Deprecated
     public Parcela(){}
 
-    public Parcela(@NotNull Fatura fatura, @NotNull @Positive int quantidade) {
+    public Parcela(@NotNull Fatura fatura, @NotNull @Positive int quantidade, @Positive BigDecimal valorParcela) {
         this.fatura = fatura;
         this.quantidade = quantidade;
-        this.valorParcela = calculaValorParcela();
+        this.valorParcela = valorParcela;
     }
 
-    private BigDecimal calculaValorParcela() {
-        return Transacao.somaTransacoes(fatura.getTransacoes()).divide(new BigDecimal(quantidade))
-                .setScale(2, RoundingMode.CEILING);
-    }
 
     public UUID getId() {
         return id;
@@ -69,6 +65,10 @@ public class Parcela {
 
     public BigDecimal getValorParcela() {
         return valorParcela;
+    }
+
+    public StatusParcelamentoEnum getStatus() {
+        return status;
     }
 
     public void setStatus(StatusParcelamentoEnum status) {

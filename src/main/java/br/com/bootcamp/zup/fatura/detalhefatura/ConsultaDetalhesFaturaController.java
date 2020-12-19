@@ -16,6 +16,8 @@ import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.time.Month;
+import java.time.Year;
+import java.time.YearMonth;
 import java.util.Optional;
 
 @RestController
@@ -36,8 +38,8 @@ public class ConsultaDetalhesFaturaController {
         if (cartao == null) {
             return ResponseEntity.notFound().build();
         }
-        Month mesAtual = LocalDate.now().getMonth();
-        Optional<Fatura> faturaOptional = faturaRepository.findByCartaoAndMesReferencia(cartao,mesAtual);
+        LocalDate dataAtual = LocalDate.now();
+        Optional<Fatura> faturaOptional = faturaRepository.findByCartaoAndMesAndAno(cartao,dataAtual.getMonth(), dataAtual.getYear());
 
         if (!faturaOptional.isPresent()) {
             return ResponseEntity.notFound().build();

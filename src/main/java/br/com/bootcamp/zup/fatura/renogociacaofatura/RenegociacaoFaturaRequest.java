@@ -1,12 +1,13 @@
-package br.com.bootcamp.zup.fatura.parcelarfatura;
+package br.com.bootcamp.zup.fatura.renogociacaofatura;
 
 import br.com.bootcamp.zup.fatura.Fatura;
+import br.com.bootcamp.zup.fatura.parcelarfatura.Parcela;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import java.math.BigDecimal;
 
-public class ParcelamentoRequest {
+public class RenegociacaoFaturaRequest {
 
     @NotNull
     @Positive
@@ -25,7 +26,7 @@ public class ParcelamentoRequest {
         return valor;
     }
 
-    public Parcela toModel(Fatura fatura) {
-        return new Parcela(fatura, quantidade, valor);
+    public Renegociacao toModel(Fatura fatura) {
+        return new Renegociacao(quantidade,valor,fatura);
     }
 }

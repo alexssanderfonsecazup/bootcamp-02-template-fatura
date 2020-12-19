@@ -8,8 +8,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import java.util.Map;
-
 @Component
 @FeignClient(url="http://localhost:8888/api/cartoes", name = "cartoes")
 public interface CartaoClient {
@@ -19,4 +17,7 @@ public interface CartaoClient {
 
     @PostMapping("/{idCartao}/parcelas")
     void parcelaCartao( @PathVariable String idCartao, @RequestBody ParcelaCartaoIntegracaoRequest parcelaCartaoIntegracaoRequest);
+
+    @PostMapping("/{idCartao}/renegociacoes")
+    void renogociaFatura( @PathVariable String idCartao, @RequestBody RenegociacaoFaturaIntegracaoRequest renegociacaoFaturaIntegracaoRequest);
 }

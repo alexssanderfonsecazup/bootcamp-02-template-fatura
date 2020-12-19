@@ -38,10 +38,11 @@ public class EstimulaTransacaoController {
     public void subscreverEnvioTransacao(){
         try{
             transacaoClient.estimulaTransacao( Map.of("id", cartaoEstimulado,"email",emailUsuarioLogado));
-            logger.info("Enviado estimulo para consumo das transações para o cartao {}" + cartaoEstimulado);
+            logger.info("Enviado estimulo para consumo das transações para o cartao {}", cartaoEstimulado);
         }catch(FeignException e){
-            logger.error("Falha ao estimular as transações para o carta {}");
-            logger.error("Response content"+ e.contentUTF8());
+            logger.info("Falha ao estimular as transações para o cartão {}", cartaoEstimulado);
+            logger.debug("Status: {}", e.status());
+            logger.debug("Response content: ", e.contentUTF8());
         }
 
     }
